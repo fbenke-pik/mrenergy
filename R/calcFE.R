@@ -33,10 +33,18 @@ calcFE <- function(ieaVersion = "default") {
 
   #------ PROCESS DATA ------------------------------------------
   # select data that have names
-  x <- data[, , map$names_in]
+
+  # TODO: temporary check, fix warnings and remove
+  if (length(setdiff(map$names_in, getNames(data))) > 0) {
+    items <- setdiff(map$names_in, getNames(data))
+    warning("mappings without data in calcIO found :", items)
+  }
+
+  x <- data[, , intersect(getNames(data), map$names_in)]
+  map <- map[map$names_in %in% getNames(x), ]
+
   # rename entries of data to match the reporting names
   getNames(x) <- paste0(map$output, " (EJ/yr)")
-
 
   # aggregate CHP and nonCHP electricity
   x <- mbind(x, setNames(x[, , "SE|Electricity|Coal|CHP (EJ/yr)"] +
