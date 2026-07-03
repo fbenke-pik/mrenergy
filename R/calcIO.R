@@ -20,7 +20,9 @@
 #' a <- calcOutput("IO", subtype = "output")
 #' }
 #'
-#' @importFrom dplyr filter mutate
+#' @importFrom dplyr filter mutate pull left_join
+#' @importFrom mrcommonsenergy toolFixIeaDataForIndustrySubsectors
+#'
 calcIO <- function(subtype = c("input", "output", "trade"),
                    ieaVersion = "default", corrected = FALSE) {
   subtype <- match.arg(subtype)
