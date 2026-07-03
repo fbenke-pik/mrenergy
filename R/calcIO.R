@@ -30,7 +30,7 @@ calcIO <- function(subtype = c("input", "output", "trade"),
            mapping <- toolGetMapping(
              type = "sectoral",
              name = "structuremappingIO_inputs.csv",
-             where = "mrremind",
+             where = "mrenergy",
              returnPathOnly = TRUE
            )
            target <- c("REMINDitems_in", "REMINDitems_out", "REMINDitems_tech")
@@ -39,7 +39,7 @@ calcIO <- function(subtype = c("input", "output", "trade"),
            mapping <- toolGetMapping(
              type = "sectoral",
              name = "structuremappingIO_outputs.csv",
-             where = "mrcommons",
+             where = "mrcommonsenergy",
              returnPathOnly = TRUE
            )
            target <- c("REMINDitems_in", "REMINDitems_out", "REMINDitems_tech")
@@ -48,7 +48,7 @@ calcIO <- function(subtype = c("input", "output", "trade"),
            mapping <- toolGetMapping(
              type = "sectoral",
              name = "structuremappingIO_trade.csv",
-             where = "mrremind",
+             where = "mrenergy",
              returnPathOnly = TRUE
            )
            target <- c("REMINDitems_enty", "REMINDitems_trade")
@@ -65,7 +65,7 @@ calcIO <- function(subtype = c("input", "output", "trade"),
   data <- readSource("IEA", subtype = ieaSubtype) * 4.1868e-5
 
   # apply IEA data postprocessing
-  data <- toolFixIEAdataForIndustrySubsectors(data)
+  data <- toolFixIeaDataForIndustrySubsectors(data)
 
   ieamatch <- utils::read.csv2(mapping, stringsAsFactors = FALSE, na.strings = "")
 
@@ -73,8 +73,8 @@ calcIO <- function(subtype = c("input", "output", "trade"),
   if (subtype == "output") {
     subsectorMapping <- toolGetMapping(
       type = "sectoral",
-      name = "mappingIEA_EDGEsubsectors_to_ESOutput.csv",
-      where = "mrremind"
+      name = "mappingIeaEdgeSubsectorsToEsOutput.csv",
+      where = "mrenergy"
     )
 
     ieamatch <- ieamatch %>%
