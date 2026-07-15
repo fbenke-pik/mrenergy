@@ -21,7 +21,6 @@
 #' }
 #'
 #' @importFrom dplyr filter mutate pull left_join
-#' @importFrom mrcommonsenergy toolFixIeaDataForIndustrySubsectors
 #'
 calcIO <- function(subtype = c("input", "output", "trade"),
                    ieaVersion = "default", corrected = FALSE) {
@@ -61,13 +60,7 @@ calcIO <- function(subtype = c("input", "output", "trade"),
     stop("Invalid parameter `ieaVersion`. Must be either 'default' or 'latest'")
   }
 
-  ieaSubtype <- if (ieaVersion == "default") "EnergyBalances" else "EnergyBalances-latest"
-
-  # read in data and convert from ktoe to EJ
-  data <- readSource("IEA", subtype = ieaSubtype) * 4.1868e-5
-
-  # apply IEA data postprocessing
-  data <- toolFixIeaDataForIndustrySubsectors(data)
+  data <- calcOutput("IeaEnergyBalances", ieaVersion = ieaVersion, aggregate = FALSE)
 
   ieamatch <- utils::read.csv2(mapping, stringsAsFactors = FALSE, na.strings = "")
 

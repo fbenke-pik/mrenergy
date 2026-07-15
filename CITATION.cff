@@ -4,7 +4,7 @@ type: software
 title: 'mrenergy: Preprocessing functions for REMIND and other energy models using
   landuse data'
 version: 0.1.5
-date-released: '2026-07-03'
+date-released: '2026-07-15'
 abstract: Preprocessing functions for REMIND and other energy models (buildings, transport,
   industry) using landuse data.
 authors:

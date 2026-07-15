@@ -46,7 +46,7 @@ A BibTeX entry for LaTeX users is
 @Misc{,
   title = {mrenergy: Preprocessing functions for REMIND and other energy models using landuse data},
   author = {Falk Benke},
-  date = {2026-07-03},
+  date = {2026-07-15},
   year = {2026},
   url = {https://github.com/pik-piam/mrenergy},
   note = {Version: 0.1.5},
