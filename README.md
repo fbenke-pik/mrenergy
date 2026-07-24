@@ -38,15 +38,15 @@ In case of questions / problems please contact Falk Benke <benke@pik-potsdam.de>
 
 To cite package **mrenergy** in publications use:
 
-Benke F (2026). "mrenergy: Preprocessing functions for REMIND and other energy models using landuse data." Version: 0.1.5, <https://github.com/pik-piam/mrenergy>.
+Benke F, Hasse R, Weigmann P (2026). "mrenergy: Preprocessing functions for REMIND and other energy models using landuse data." Version: 0.1.5, <https://github.com/pik-piam/mrenergy>.
 
 A BibTeX entry for LaTeX users is
 
  ```latex
 @Misc{,
   title = {mrenergy: Preprocessing functions for REMIND and other energy models using landuse data},
-  author = {Falk Benke},
-  date = {2026-07-15},
+  author = {Falk Benke and Robin Hasse and Pascal Weigmann},
+  date = {2026-07-24},
   year = {2026},
   url = {https://github.com/pik-piam/mrenergy},
   note = {Version: 0.1.5},
