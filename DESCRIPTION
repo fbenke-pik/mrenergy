@@ -2,7 +2,7 @@ Type: Package
 Package: mrenergy
 Title: Preprocessing functions for REMIND and other energy models using landuse data
 Version: 0.1.5
-Date: 2026-07-24
+Date: 2026-08-13
 Authors@R: c(
     person("Falk", "Benke", , "benke@pik-potsdam.de", role = c("aut", "cre")),
     person("Robin", "Hasse", role = "aut"),
@@ -36,4 +36,4 @@ Encoding: UTF-8
 LazyData: no
 Roxygen: list(markdown = TRUE)
 Config/Needs/website: tidyverse/tidytemplate
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
