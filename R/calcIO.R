@@ -13,14 +13,9 @@
 #' @param corrected boolean indicating whether corrections should be applied to the data
 #' after mapping
 #' @return IEA data as MAgPIE object aggregated to country level
-#' @author Anastasis Giannousakis
+#' @author Anastasis Giannousakis, Falk Benke
 #'
-#' @examples
-#' \dontrun{
-#' a <- calcOutput("IO", subtype = "output")
-#' }
-#'
-#' @importFrom dplyr filter mutate pull left_join
+#' @importFrom dplyr filter mutate
 #'
 calcIO <- function(subtype = c("input", "output", "trade"),
                    ieaVersion = "default", corrected = FALSE) {
@@ -73,7 +68,7 @@ calcIO <- function(subtype = c("input", "output", "trade"),
     )
 
     ieamatch <- ieamatch %>%
-      left_join(subsectorMapping, by = c("REMINDitems_in", "REMINDitems_out", "REMINDitems_tech")) %>%
+      dplyr::left_join(subsectorMapping, by = c("REMINDitems_in", "REMINDitems_out", "REMINDitems_tech")) %>%
       mutate(
         "REMINDitems_in" = ifelse(is.na(.data$REMINDitems_in_ESM), .data$REMINDitems_in, .data$REMINDitems_in_ESM),
         "REMINDitems_out" = ifelse(is.na(.data$REMINDitems_out_ESM), .data$REMINDitems_out, .data$REMINDitems_out_ESM),
@@ -96,11 +91,11 @@ calcIO <- function(subtype = c("input", "output", "trade"),
       function(item) {
         product_flow <- ieamatch %>%
           filter(item == .data$target) %>%
-          pull("product.flow")
+          dplyr::pull("product.flow")
 
         weights <- ieamatch %>%
           filter(item == .data$target) %>%
-          pull("Weight") %>%
+          dplyr::pull("Weight") %>%
           as.numeric()
 
         tmp <- dimSums(
