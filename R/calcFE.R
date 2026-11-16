@@ -17,15 +17,15 @@ calcFE <- function(ieaVersion = "default") {
     where = "mrenergy", returnPathOnly = TRUE
   )
 
-  map <- utils::read.csv2(mapping, stringsAsFactors = FALSE, na.strings = "")
+  map <- utils::read.csv2(mapping, stringsAsFactors = FALSE, na.strings = "") %>%
+    select("io", "output") %>%
+    filter(!is.na(.data$output))
 
   x <- x[, , intersect(getNames(x), unique(map$io))]
 
   # TODO: fix outdated mappings once we drop support for IEA 2024
   map <- data.frame(io = getNames(x)) %>%
-    left_join(map, by = "io") %>%
-    select("io", "output") %>%
-    filter(!is.na(.data$output))
+    left_join(map, by = "io")
 
   getNames(x) <- paste0(map$output, " (EJ/yr)")
 
