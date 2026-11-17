@@ -17,17 +17,17 @@ calcFE <- function(ieaVersion = "default") {
     where = "mrenergy", returnPathOnly = TRUE
   )
 
+  # TODO: fix outdated mappings once we drop support for IEA 2024
   map <- utils::read.csv2(mapping, stringsAsFactors = FALSE, na.strings = "") %>%
     select("io", "output") %>%
-    filter(!is.na(.data$output))
+    filter(!is.na(.data$output), .data$io %in% getNames(x))
 
-  x <- x[, , intersect(getNames(x), unique(map$io))]
+  x <- x[, , unique(map$io)]
 
-  # TODO: fix outdated mappings once we drop support for IEA 2024
-  map <- data.frame(io = getNames(x)) %>%
-    left_join(map, by = "io")
+  map <- mutate(map, "output" = paste0(.data$output, " (EJ/yr)"))
 
-  getNames(x) <- paste0(map$output, " (EJ/yr)")
+  x <- toolAggregate(x, rel = map, dim = 3, from = "io", to = "output")
+
 
   # aggregate CHP and nonCHP electricity
 
