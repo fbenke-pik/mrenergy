@@ -20,14 +20,19 @@ calcFE <- function(ieaVersion = "default") {
   # TODO: fix outdated mappings once we drop support for IEA 2024
   map <- utils::read.csv2(mapping, stringsAsFactors = FALSE, na.strings = "") %>%
     select("io", "output") %>%
-    filter(!is.na(.data$output), .data$io %in% getNames(x))
+    filter(!is.na(.data$output))
 
-  x <- x[, , unique(map$io)]
+  if (length(setdiff(map$io, getNames(x))) > 0) {
+    message(paste0("outdated mappings in FE reporting", paste0(setdiff(map$io, getNames(x)), collapse = ", ")))
+  }
 
-  map <- mutate(map, "output" = paste0(.data$output, " (EJ/yr)"))
+  map <- map %>%
+    filter(.data$io %in% getNames(x)) %>%
+    mutate("output" = paste0(.data$output, " (EJ/yr)"))
 
-  x <- toolAggregate(x, rel = map, dim = 3, from = "io", to = "output")
+  x <- toolAggregate(x[, , unique(map$io)], rel = map, dim = 3, from = "io", to = "output")
 
+  getSets(x)  <- c("region", "period", "variable")
 
   # aggregate CHP and nonCHP electricity
 
@@ -46,18 +51,6 @@ calcFE <- function(ieaVersion = "default") {
                            x[, , "SE|Heat|Gas|HP (EJ/yr)"], "SE|Heat|Gas (EJ/yr)"))
   x <- mbind(x, setNames(x[, , "SE|Heat|Biomass|CHP (EJ/yr)"] +
                            x[, , "SE|Heat|Biomass|HP (EJ/yr)"], "SE|Heat|Biomass (EJ/yr)"))
-
-  # rename Diesel/Petrol to LDV/non-LDV
-  x <- mbind(x, setNames(x[, , "FE|Transport|Liquids|Diesel|Biomass (EJ/yr)"], "FE|Transport|non-LDV|Liquids|Biomass (EJ/yr)"))
-  x <- mbind(x, setNames(x[, , "FE|Transport|Liquids|Diesel|Fossil (EJ/yr)"], "FE|Transport|non-LDV|Liquids|Fossil (EJ/yr)"))
-  x <- mbind(x, setNames(x[, , "FE|Transport|Liquids|Petrol|Biomass (EJ/yr)"], "FE|Transport|LDV|Liquids|Biomass (EJ/yr)"))
-  x <- mbind(x, setNames(x[, , "FE|Transport|Liquids|Petrol|Fossil (EJ/yr)"], "FE|Transport|LDV|Liquids|Fossil (EJ/yr)"))
-  x <- x[, , c(
-    "FE|Transport|Liquids|Diesel|Biomass (EJ/yr)",
-    "FE|Transport|Liquids|Diesel|Fossil (EJ/yr)",
-    "FE|Transport|Liquids|Petrol|Biomass (EJ/yr)",
-    "FE|Transport|Liquids|Petrol|Fossil (EJ/yr)"
-  ), invert = TRUE]
 
   # aggregate LDV and non-LDV to Liquids|Biomass/Fossil
   x <- mbind(x, setNames(x[, , "FE|Transport|LDV|Liquids|Biomass (EJ/yr)"] +
